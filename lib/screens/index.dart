@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:splitsio/widgets/run_list.dart';
-import 'package:splitsio/models/run.dart';
+import 'package:splitsio/models/runner.dart';
 
 class IndexScreen extends StatelessWidget {
-  // This widget is the root of your application.
+  final Runner runner;
+
+  IndexScreen({this.runner});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,7 +23,7 @@ class IndexScreen extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(title: Text('Splits.io')),
-          body: Center(child: RunList(runs: [Run(), Run()])),
+          body: Center(child: RunList(runner: runner)),
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
           ),

@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show PlatformException;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:splitsio/screens/index.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'package:splitsio/screens/index.dart';
+import 'package:splitsio/models/runner.dart';
 
 void main() => runApp(Splitsio());
 
@@ -36,13 +38,12 @@ class Splitsio extends StatelessWidget {
 class LandingPage extends StatelessWidget {
   LandingPage() : super();
   static const redirectUri = "splitsio://splits.io/auth/splitsio/callback";
-  static final clientId = "srIH3-h_vJNyfBlGFkCFPLhkafFU94YIUTXQYw9ahrA";
-  static final clientSecret = "Y1mzZWuAfcidxPDCN8AUiul0ClTrzvo_WU4YxaTBzzA";
+  static final clientId = "qRWoaDNtJnPMnsoR-oh89t40_9RozQMjSv04-hVDnBg";
+  static final clientSecret = "wlWBUaImnBlP0gs8MTNisM4qfL7WTrFPzMkp8Z4L-1Q";
   static final authorizationEndpoint = Uri.parse(
       "https://splits.io/oauth/authorize?response_type=code&scope=upload_run+delete_run+manage_race&redirect_uri=$redirectUri&client_id=$clientId");
-  final credentialsFile = new File("~/.myapp/credentials.json");
-  final storage = new FlutterSecureStorage();
-  StreamSubscription _sub;
+  static final storage = new FlutterSecureStorage();
+  static StreamSubscription _sub;
 
   Future<Null> initUniLinks(BuildContext context) async {
     try {
@@ -50,14 +51,18 @@ class LandingPage extends StatelessWidget {
       if (uri != null) {
         snatchCode(context, uri);
       }
-      _sub = getUriLinksStream().listen((Uri uri) {
+      var listen = getUriLinksStream().listen((Uri uri) {
         snatchCode(context, uri);
       }, onError: (err) {});
+      _sub = listen;
     } on PlatformException {}
   }
 
   void snatchCode(BuildContext context, Uri uri) async {
     try {
+      Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
+        return Center(child: CircularProgressIndicator());
+      }));
       final response = await http.post("https://splits.io/oauth/token", body: {
         "grant_type": "authorization_code",
         "client_id": clientId,
@@ -65,9 +70,10 @@ class LandingPage extends StatelessWidget {
         "code": uri.queryParameters["code"],
         "redirect_uri": redirectUri,
       });
+      final String accessToken = jsonDecode(response.body)["access_token"];
       storage.write(
         key: 'splitsio_access_token',
-        value: jsonDecode(response.body)["access_token"],
+        value: accessToken,
       );
       storage.write(
         key: 'splitsio_refresh_token',
@@ -79,9 +85,19 @@ class LandingPage extends StatelessWidget {
             .add(Duration(seconds: jsonDecode(response.body)["expires_in"]))
             .toString(),
       );
+
+      final runner = await Runner.byToken(accessToken);
+      storage.write(
+        key: 'splitsio_access_token_owner_id',
+        value: runner.id,
+      );
+      storage.write(
+        key: 'splitsio_access_token_owner_name',
+        value: runner.name,
+      );
       Navigator.push(context,
           MaterialPageRoute<void>(builder: (BuildContext context) {
-        return IndexScreen();
+        return IndexScreen(runner: runner);
       }));
     } on PlatformException {}
   }
@@ -130,9 +146,6 @@ class LandingPage extends StatelessWidget {
           } else {
             throw 'Cannot open Splits.io in browser to authenticate.';
           }
-          //var response =
-          //await client.read("https://splits.io/oauth/token/info");
-          //await credentialsFile.writeAsString(client.credentials.toJson());
         },
       ),
     );

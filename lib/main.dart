@@ -1,16 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show PlatformException;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:splitsio/models/runner.dart';
+import 'package:splitsio/screens/index.dart';
+import 'package:splitsio/widgets/logo.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'package:splitsio/screens/index.dart';
-import 'package:splitsio/models/runner.dart';
 
 void main() => runApp(Splitsio());
 
@@ -86,15 +85,19 @@ class LandingPage extends StatelessWidget {
             .toString(),
       );
 
-      final runner = await Runner.byToken(accessToken);
-      storage.write(
-        key: 'splitsio_access_token_owner_id',
-        value: runner.id,
-      );
-      storage.write(
-        key: 'splitsio_access_token_owner_name',
-        value: runner.name,
-      );
+      final Future<Runner> runner = Runner.byToken(accessToken);
+
+      runner.then((Runner runner) {
+        storage.write(
+          key: 'splitsio_access_token_owner_id',
+          value: runner.id,
+        );
+        storage.write(
+          key: 'splitsio_access_token_owner_name',
+          value: runner.name,
+        );
+      });
+
       Navigator.push(context,
           MaterialPageRoute<void>(builder: (BuildContext context) {
         return IndexScreen(runner: runner);
@@ -107,40 +110,33 @@ class LandingPage extends StatelessWidget {
     initUniLinks(context);
 
     return Scaffold(
-      body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(
-              'assets/images/logo-skinny.png',
-              height: 65,
-            ),
-            Padding(padding: EdgeInsets.all(3)),
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'plits.io',
-                    style: TextStyle(
-                      fontFamily: 'Bukhari Script',
-                      fontSize: 50,
-                    ),
-                  ),
-                ],
-                style: TextStyle(
-                    fontFamily: 'Bukhari Script Alternates', fontSize: 50),
-                text: 'S',
-              ),
-            ),
-          ],
-        ),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              Center(
+                child: Logo(size: 44),
+              )
+            ],
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+          ),
+        ],
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: Icon(Icons.face),
-        label: Text('Sign in'),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.arrow_forward),
         onPressed: () async {
-          //var client = await oauth2.clientCredentialsGrant(
-          //authorizationEndpoint, identifier, secret);
+          final token = await storage.read(key: 'splitsio_access_token');
+          if (token != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute<void>(builder: (context) {
+                return IndexScreen(runner: Runner.byToken(token));
+              }),
+            );
+          }
           if (await canLaunch(authorizationEndpoint.toString())) {
             await launch(authorizationEndpoint.toString());
           } else {

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:splitsio/models/run.dart';
 import 'package:splitsio/models/runner.dart';
 
 class RunList extends StatelessWidget {
-  final Runner runner;
+  final Future<Runner> runner;
   final String accessToken;
 
   RunList({@required this.runner, @required this.accessToken});
@@ -11,13 +13,27 @@ class RunList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: runner.pbs(accessToken),
+      future: runner.then((runner) => runner.pbs(accessToken)),
       builder: (BuildContext context, AsyncSnapshot<List<Run>> snapshot) {
         if (snapshot.hasData) {
-          return ListView(
+          return Column(
             children: snapshot.data.map((run) {
               return Card(
                 child: ListTile(
+                  onLongPress: () async {
+                    if (await canLaunch("https://splits.io/${run.id}")) {
+                    await launch("https://splits.io/${run.id}");
+                    } else {
+                    throw 'Cannot open Splits.io in browser.';
+                    }
+                  },
+                  onTap: () async {
+                    if (await canLaunch("https://splits.io/${run.id}")) {
+                      await launch("https://splits.io/${run.id}");
+                    } else {
+                      throw 'Cannot open Splits.io in browser.';
+                    }
+                  },
                   subtitle: Text(run.category.name),
                   title: Text(run.game.name),
                   trailing: Text(run.duration(),
@@ -34,7 +50,14 @@ class RunList extends StatelessWidget {
           return Text(snapshot.error);
         }
 
-        return CircularProgressIndicator();
+        return Column(
+          children: [
+            Padding(padding: EdgeInsets.all(20)),
+            CircularProgressIndicator()
+          ],
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+        );
       },
     );
   }

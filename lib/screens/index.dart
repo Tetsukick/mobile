@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:splitsio/widgets/run_list.dart';
 import 'package:splitsio/models/runner.dart';
+import 'package:splitsio/screens/timer.dart';
+import 'package:splitsio/widgets/logo.dart';
+import 'package:splitsio/widgets/run_list.dart';
 
 class IndexScreen extends StatelessWidget {
-  final Runner runner;
+  final Future<Runner> runner;
 
   IndexScreen({this.runner});
 
@@ -22,10 +24,22 @@ class IndexScreen extends StatelessWidget {
           primarySwatch: Colors.amber,
         ),
         home: Scaffold(
-          appBar: AppBar(title: Text('Splits.io')),
-          body: Center(child: RunList(runner: runner)),
+          appBar: AppBar(
+            title: Logo(size: 22),
+          ),
+          body: ListView(
+            children: [
+              RunList(runner: runner),
+            ],
+          ),
           floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
+            child: Icon(Icons.timer),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute<void>(builder: (context) {
+                return TimerScreen();
+              }));
+            },
           ),
         ));
   }

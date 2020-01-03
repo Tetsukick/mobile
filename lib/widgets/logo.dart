@@ -10,7 +10,6 @@ class Logo extends StatelessWidget {
     return
       Hero(
         child: Material(
-          color: Colors.transparent,
           child: Row(
             children: <Widget>[
               Image.asset(
@@ -36,6 +35,7 @@ class Logo extends StatelessWidget {
               ),
             ],
           ),
+          color: Colors.transparent,
         ),
         tag: 'logo',
       );

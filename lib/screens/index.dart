@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:splitsio/models/runner.dart';
 import 'package:splitsio/screens/timer.dart';
 import 'package:splitsio/widgets/logo.dart';
@@ -34,6 +35,7 @@ class IndexScreen extends StatelessWidget {
           ),
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.timer),
+            heroTag: 'timer',
             onPressed: () {
               Navigator.push(context,
                   MaterialPageRoute<void>(builder: (context) {

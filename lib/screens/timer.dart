@@ -12,50 +12,65 @@ class TimerScreen extends StatelessWidget {
       appBar: AppBar(
         title: Logo(size: 22),
       ),
-      body: Center(
-          child: Column(children: [
-        Expanded(
+      body: Hero(
+        child: Material(
           child: Center(
-            child: Text('00:00:00',
-                style: TextStyle(
-                    fontFamily: 'monospace', fontSize: 60, letterSpacing: -3)),
-          ),
-          flex: 2,
+              child: Column(children: [
+            Expanded(
+              child: Center(
+                child: Text('00:00:00',
+                    style: TextStyle(
+                        fontFamily: 'monospace', fontSize: 60, letterSpacing: -3)),
+              ),
+              flex: 2,
+            ),
+            Expanded(
+              child: SizedBox.expand(
+                  child: Row(
+                children: [
+                  Expanded(
+                      child: SizedBox.expand(
+                          child: Padding(
+                        child: OutlineButton(
+                          child: Text('Undo', style: TextStyle(fontSize: 30)),
+                          borderSide: BorderSide(color: Colors.red[400]),
+                          onPressed: () {},
+                        ),
+                        padding: EdgeInsets.all(10),
+                      )),
+                      flex: 1),
+                  Expanded(
+                      child: SizedBox.expand(
+                          child: Padding(
+                        child: OutlineButton(
+                          child: Text('Skip', style: TextStyle(fontSize: 30)),
+                          borderSide: BorderSide(color: Colors.green[400]),
+                          onPressed: () {},
+                        ),
+                        padding: EdgeInsets.all(10),
+                      )),
+                      flex: 1),
+                ],
+              )),
+              flex: 1,
+            ),
+            Expanded(
+              child: SizedBox.expand(
+                  child: Padding(
+                child: OutlineButton(
+                  child: Text('Start', style: TextStyle(fontSize: 40)),
+                  borderSide: BorderSide(color: Colors.amber[800]),
+                  onPressed: () {},
+                ),
+                padding: EdgeInsets.all(10),
+              )),
+              flex: 2,
+            ),
+          ])),
+          color: Colors.transparent,
         ),
-        Expanded(
-          child: SizedBox.expand(
-              child: Row(
-            children: [
-              Expanded(
-                  child: SizedBox.expand(
-                      child: RaisedButton(
-                    child: Text('Undo', style: TextStyle(fontSize: 30)),
-                    color: Colors.red[400],
-                    onPressed: () {},
-                  )),
-                  flex: 1),
-              Expanded(
-                  child: SizedBox.expand(
-                      child: RaisedButton(
-                    child: Text('Skip', style: TextStyle(fontSize: 30)),
-                    color: Colors.green[400],
-                    onPressed: () {},
-                  )),
-                  flex: 1),
-            ],
-          )),
-          flex: 1,
-        ),
-        Expanded(
-          child: SizedBox.expand(
-              child: RaisedButton(
-            child: Text('Start', style: TextStyle(fontSize: 40)),
-            color: Colors.amber[800],
-            onPressed: () {},
-          )),
-          flex: 2,
-        ),
-      ])),
+        tag: 'timer',
+      ),
     );
   }
 }

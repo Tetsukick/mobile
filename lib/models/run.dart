@@ -91,6 +91,15 @@ class Run {
     throw 'Cannot retrieve runs for user';
   }
 
+  static Map<Game, List<Run>> byGame(List<Run> runs) {
+    Map<Game, List<Run>> m = Map<Game, List<Run>>();
+    runs.forEach((run) {
+      m.putIfAbsent(run.game, () => List<Run>());
+      m[run.game].add(run);
+    });
+    return m;
+  }
+
   String duration() {
     String twoDigits(int n) {
       if (n >= 10) return "$n";

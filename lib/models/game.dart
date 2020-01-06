@@ -49,11 +49,11 @@ class Game {
         .get("https://speedrun.com/api/v1/games/$srdcId")
         .then((http.Response response) {
       var game = JsonDecoder().convert(response.body)['data'];
-      if (game != null) {
+      if (game != null && game['assets']['cover-large']['uri'] != null) {
         return Uri.parse(game['assets']['cover-large']['uri']);
       }
 
-      return null;
+      return Uri.parse("https://splits.io/logo.png");
     });
   }
 }

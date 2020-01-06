@@ -43,6 +43,7 @@ class LandingPage extends StatelessWidget {
       "https://splits.io/oauth/authorize?response_type=code&scope=upload_run+delete_run+manage_race&redirect_uri=$redirectUri&client_id=$clientId");
   static final storage = new FlutterSecureStorage();
   static StreamSubscription _sub;
+  final Set<String> usedCodes = Set<String>();
 
   Future<Null> initUniLinks(BuildContext context) async {
     try {
@@ -50,18 +51,27 @@ class LandingPage extends StatelessWidget {
       if (uri != null) {
         snatchCode(context, uri);
       }
-      var listen = getUriLinksStream().listen((Uri uri) {
+      _sub = getUriLinksStream().listen((Uri uri) {
         snatchCode(context, uri);
       }, onError: (err) {});
-      _sub = listen;
     } on PlatformException {}
   }
 
+  void dispose() {
+    _sub.cancel();
+  }
+
   void snatchCode(BuildContext context, Uri uri) async {
+    if (usedCodes.contains(uri.queryParameters['code'])) {
+      return;
+    }
+    usedCodes.add(uri.queryParameters['code']);
+
     try {
       Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
-        return Center(child: CircularProgressIndicator());
+        return Scaffold(body: Center(child: CircularProgressIndicator()));
       }));
+
       final response = await http.post("https://splits.io/oauth/token", body: {
         "grant_type": "authorization_code",
         "client_id": clientId,
@@ -69,23 +79,29 @@ class LandingPage extends StatelessWidget {
         "code": uri.queryParameters["code"],
         "redirect_uri": redirectUri,
       });
-      final String accessToken = jsonDecode(response.body)["access_token"];
+
+      final body = await json.decode(response.body);
+
+      if (response.statusCode != 200) {
+        throw "${body.error} - ${body.error_description}";
+      }
+
       storage.write(
         key: 'splitsio_access_token',
-        value: accessToken,
+        value: body['access_token'],
       );
       storage.write(
         key: 'splitsio_refresh_token',
-        value: jsonDecode(response.body)["refresh_token"],
+        value: body['refresh_token'],
       );
       storage.write(
         key: 'splitsio_access_token_expiry',
         value: DateTime.now()
-            .add(Duration(seconds: jsonDecode(response.body)["expires_in"]))
+            .add(Duration(seconds: body['expires_in']))
             .toString(),
       );
 
-      final Future<Runner> runner = Runner.byToken(accessToken);
+      final Future<Runner> runner = Runner.byToken(body['access_token']);
 
       runner.then((Runner runner) {
         storage.write(

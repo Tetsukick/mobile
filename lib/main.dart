@@ -83,7 +83,7 @@ class LandingPage extends StatelessWidget {
       final body = await json.decode(response.body);
 
       if (response.statusCode != 200) {
-        throw "${body.error} - ${body.error_description}";
+        throw "${body['error']} - ${body['error_description']}";
       }
 
       storage.write(

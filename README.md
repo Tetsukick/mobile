@@ -1,11 +1,26 @@
 # Splits.io Mobile App
+This is a work-in-progress mobile (Android/iOS) app for Splits.io. It is in
+an early-alpha state.
 
-This is a work-in-progress mobile (Android/iOS) app for Splits.io. It is in an early alpha state.
+The published Android app is on the [Google Play Store][android]. The iOS app
+is not yet published.
+
+[android]: https://play.google.com/store/apps/details?id=io.splits
 
 ## Getting Started
 
-The app is written in Flutter. The code base is shared between Android and iOS.
+### Prerequisites
+- [Flutter][flutter] 
 
-Flutter is pretty easy to get set up. You can view how here: https://flutter.dev/docs/get-started/install
+[flutter]: https://flutter.dev/docs/get-started/install
 
-In short, you can choose to build and develop the app either from the command line or from Android Studio. If you are familiar with one of those two options, that's going to be the simpler one to set up for you. As a default, I recommend command line. I have tested both options on both \*nix and Windows.
+### Overview
+Flutter is a platform-agnostic mobile framework by Google that uses the Dart
+language for both logic and layout. It's very similar to modern JavaScript
+and easy to get spun up on.
+
+The code base is shared between Android and iOS.
+
+You need Android Studio to develop in Flutter, but you don't need to actually
+use it -- only have it installed. I recommend Visual Studio Code as a very
+good and newbie-friendly Flutter development environment.

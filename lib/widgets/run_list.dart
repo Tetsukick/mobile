@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class RunList extends StatelessWidget {
   final Future<Runner> runner;
-  final String accessToken;
+  final Future<String> accessToken;
 
   RunList({@required this.runner, @required this.accessToken});
 

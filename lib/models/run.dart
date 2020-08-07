@@ -58,7 +58,7 @@ class Run {
       realtimeSumOfBest:
           Duration(milliseconds: json['realtime_sum_of_best_ms']),
       gametimeSumOfBest:
-          Duration(milliseconds: json['gametime_sum_of_best_ms']),
+          Duration(milliseconds: json['gametime_sum_of_best_ms'] ?? 0),
       defaultTiming:
           json['default_timing'] == 'game' ? Timing.game : Timing.real,
       program: json['program'],
@@ -73,10 +73,11 @@ class Run {
     );
   }
 
-  static Future<List<Run>> fetchPbs({String accessToken, Runner runner}) async {
+  static Future<List<Run>> fetchPbs(
+      {Future<String> accessToken, Runner runner}) async {
     final response = await http
         .get('https://splits.io/api/v4/runners/${runner.name}/pbs', headers: {
-      "Authorization": "Bearer $accessToken",
+      "Authorization": "Bearer ${await accessToken}",
     });
 
     List<Run> runs = [];

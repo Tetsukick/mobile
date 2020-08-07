@@ -4,12 +4,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show PlatformException;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:http/http.dart' as http;
+import 'package:uni_links/uni_links.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:splitsio/models/runner.dart';
 import 'package:splitsio/screens/index.dart';
 import 'package:splitsio/widgets/logo.dart';
-import 'package:uni_links/uni_links.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(Splitsio());
 
@@ -62,6 +64,14 @@ class LandingPage extends StatelessWidget {
   }
 
   void snatchCode(BuildContext context, Uri uri) async {
+    DateTime existingToken = DateTime.parse(await storage.read(
+      key: 'splitsio_access_token_expiry',
+    ));
+
+    if (DateTime.now().isBefore(existingToken)) {
+      return;
+    }
+
     if (usedCodes.contains(uri.queryParameters['code'])) {
       return;
     }
@@ -124,6 +134,17 @@ class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     initUniLinks(context);
+
+    storage.read(key: 'splitsio_access_token').then((token) {
+      if (token != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute<void>(builder: (context) {
+            return IndexScreen(runner: Runner.byToken(token));
+          }),
+        );
+      }
+    });
 
     return Scaffold(
       body: Column(

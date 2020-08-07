@@ -14,7 +14,15 @@ class Runner {
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  Runner({this.id, this.twitchId, this.twitchName, this.displayName, this.name, this.avatar, this.createdAt, this.updatedAt});
+  Runner(
+      {this.id,
+      this.twitchId,
+      this.twitchName,
+      this.displayName,
+      this.name,
+      this.avatar,
+      this.createdAt,
+      this.updatedAt});
 
   factory Runner.fromJson(Map<String, dynamic> json) {
     return Runner(
@@ -30,7 +38,8 @@ class Runner {
   }
 
   static Future<Runner> byToken(String accessToken) async {
-    final response = await http.get('https://splits.io/api/v4/runner', headers: {
+    final response =
+        await http.get('https://splits.io/api/v4/runner', headers: {
       "Authorization": "Bearer $accessToken",
     });
 
@@ -41,7 +50,7 @@ class Runner {
     throw 'Cannot retrieve logged-in user from API. Maybe you do not have any runs?';
   }
 
-  Future<List<Run>> pbs(String accessToken) {
+  Future<List<Run>> pbs(Future<String> accessToken) {
     return Run.fetchPbs(accessToken: accessToken, runner: this);
   }
 }

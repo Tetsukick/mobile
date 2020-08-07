@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:splitsio/models/runner.dart';
-import 'package:splitsio/screens/timer.dart';
 import 'package:splitsio/widgets/logo.dart';
 import 'package:splitsio/widgets/run_list.dart';
 
 class IndexScreen extends StatelessWidget {
   final Future<Runner> runner;
+  static final storage = new FlutterSecureStorage();
 
   IndexScreen({this.runner});
 
@@ -30,9 +32,13 @@ class IndexScreen extends StatelessWidget {
           ),
           body: ListView(
             children: [
-              RunList(runner: runner),
+              RunList(
+                runner: runner,
+                accessToken: storage.read(key: 'splitsio_access_token'),
+              ),
             ],
           ),
+          /*
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.timer),
             heroTag: 'timer',
@@ -43,6 +49,7 @@ class IndexScreen extends StatelessWidget {
               }));
             },
           ),
+          */
         ));
   }
 }

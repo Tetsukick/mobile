@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show PlatformException;
@@ -41,8 +42,16 @@ class LandingPage extends StatelessWidget {
   static const redirectUri = "splitsio://splits.io/auth/splitsio/callback";
   static final clientId = "qRWoaDNtJnPMnsoR-oh89t40_9RozQMjSv04-hVDnBg";
   static final clientSecret = "wlWBUaImnBlP0gs8MTNisM4qfL7WTrFPzMkp8Z4L-1Q";
-  static final authorizationEndpoint = Uri.encodeFull(
-      "https://splits.io/oauth/authorize?response_type=code&scope=upload_run+delete_run+manage_race&redirect_uri=$redirectUri&client_id=$clientId");
+  static final authorizationEndpoint =
+      Uri(scheme: 'https', host: 'splits.io', pathSegments: [
+    'oauth',
+    'authorize'
+  ], queryParameters: {
+    'response_type': 'code',
+    'client_id': clientId,
+    'redirect_uri': redirectUri,
+    'scope': 'upload_run+delete_run+manage_race',
+  });
   static final storage = new FlutterSecureStorage();
   static StreamSubscription _sub;
   final Set<String> usedCodes = Set<String>();
@@ -55,7 +64,9 @@ class LandingPage extends StatelessWidget {
       }
       _sub = getUriLinksStream().listen((Uri uri) {
         snatchCode(context, uri);
-      }, onError: (err) {});
+      }, onError: (err) {
+        stderr.writeln(err);
+      });
     } on PlatformException {}
   }
 
@@ -64,11 +75,11 @@ class LandingPage extends StatelessWidget {
   }
 
   void snatchCode(BuildContext context, Uri uri) async {
-    DateTime existingToken = DateTime.parse(await storage.read(
+    DateTime expiry = DateTime.parse(await storage.read(
       key: 'splitsio_access_token_expiry',
     ));
 
-    if (DateTime.now().isBefore(existingToken)) {
+    if (DateTime.now().isBefore(expiry)) {
       return;
     }
 
@@ -136,11 +147,17 @@ class LandingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     initUniLinks(context);
 
-    storage.read(key: 'splitsio_access_token').then((token) {
-      if (token != null) {
+    Future.wait([
+      storage.read(key: 'splitsio_access_token'),
+      storage.read(key: 'splitsio_access_token_expiry'),
+    ]).then((List<String> vals) {
+      String token = vals[0];
+      String expiry = vals[1];
+
+      if (DateTime.parse(expiry).isAfter(DateTime.now())) {
         Navigator.push(
           context,
-          MaterialPageRoute<void>(builder: (context) {
+          MaterialPageRoute<void>(builder: (BuildContext context) {
             return IndexScreen(runner: Runner.byToken(token));
           }),
         );

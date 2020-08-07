@@ -41,7 +41,7 @@ class LandingPage extends StatelessWidget {
   static const redirectUri = "splitsio://splits.io/auth/splitsio/callback";
   static final clientId = "qRWoaDNtJnPMnsoR-oh89t40_9RozQMjSv04-hVDnBg";
   static final clientSecret = "wlWBUaImnBlP0gs8MTNisM4qfL7WTrFPzMkp8Z4L-1Q";
-  static final authorizationEndpoint = Uri.parse(
+  static final authorizationEndpoint = Uri.encodeFull(
       "https://splits.io/oauth/authorize?response_type=code&scope=upload_run+delete_run+manage_race&redirect_uri=$redirectUri&client_id=$clientId");
   static final storage = new FlutterSecureStorage();
   static StreamSubscription _sub;
@@ -93,7 +93,8 @@ class LandingPage extends StatelessWidget {
       final body = await json.decode(response.body);
 
       if (response.statusCode != 200) {
-        throw "${body['error']} - ${body['error_description']}";
+        debugPrint("${body['error']} - ${body['error_description']}");
+        return;
       }
 
       storage.write(

@@ -1,0 +1,10 @@
+analyzer:
+  exclude: [build/**, lib/**/*.g.dart]
+  strong-mode:
+    # never implicitly cast types down
+    implicit-casts: false
+    implicit-dynamic: false
+
+linter:
+  rules:
+    - camel_case_types

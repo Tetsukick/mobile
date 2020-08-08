@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'package:splitsio/models/auth.dart';
 import 'package:splitsio/models/runner.dart';
-import 'package:splitsio/widgets/logo.dart';
 import 'package:splitsio/widgets/game_list.dart';
+import 'package:splitsio/widgets/landing_page.dart';
+import 'package:splitsio/widgets/logo.dart';
 
 class IndexScreen extends StatelessWidget {
-  final Future<Runner> runner;
+  final String token;
   static final storage = new FlutterSecureStorage();
 
-  IndexScreen({this.runner});
+  final Future<Runner> runner;
+
+  IndexScreen({@required this.token, @required this.runner});
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +32,24 @@ class IndexScreen extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(Icons.exit_to_app),
+                  onPressed: () async {
+                    await Auth.clear();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(builder: (BuildContext context) {
+                        return LandingPage();
+                      }),
+                    );
+                  }),
+            ],
             title: Logo(size: 22),
           ),
           body: GameList(
+            token: token,
             runner: runner,
-            accessToken: storage.read(key: 'splitsio_access_token'),
           ),
           /*
           floatingActionButton: FloatingActionButton(

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,8 @@ import 'package:splitsio/models/category.dart';
 
 class Game {
   static Map<String, Game> cached = Map<String, Game>();
+  static final defaultCover =
+      Uri(scheme: 'https', host: 'splits.io', pathSegments: ['logo.png']);
 
   final String id;
   final String srdcId;
@@ -37,12 +40,12 @@ class Game {
     }
 
     Game game = Game(
-      id: json['id'],
-      srdcId: json['srdc_id'],
-      name: json['name'],
-      shortname: json['shortname'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+      id: json['id'] as String,
+      srdcId: json['srdc_id'] as String,
+      name: json['name'] as String,
+      shortname: json['shortname'] as String,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
       // categories: // Not present in Run response
       // json['categories'].map((category) => Category.fromJson(category)),
     );
@@ -67,14 +70,19 @@ class Game {
             host: 'speedrun.com',
             pathSegments: ['api', 'v1', 'games', srdcId]))
         .then((http.Response response) {
-      var game = JsonDecoder().convert(response.body)['data'];
+      Map<String, dynamic> game =
+          JsonDecoder().convert(response.body)['data'] as Map<String, dynamic>;
       if (game != null && game['assets']['cover-large']['uri'] != null) {
-        return Uri.parse(game['assets']['cover-large']['uri']);
+        try {
+          return Uri.parse(game['assets']['cover-large']['uri'] as String);
+        } on FormatException catch (error) {
+          stderr.writeln(error);
+          return defaultCover;
+        }
       }
 
       // Fallback placeholder image
-      return Uri(
-          scheme: 'https', host: 'splits.io', pathSegments: ['logo.png']);
+      return defaultCover;
     });
 
     return _cover;

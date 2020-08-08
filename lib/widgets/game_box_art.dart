@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'package:cache_image/cache_image.dart';
-
 import 'package:splitsio/models/game.dart';
+import 'package:splitsio/models/runner.dart';
 import 'package:splitsio/screens/game.dart';
 
 class GameBoxArt extends StatelessWidget {
+  final String token;
   final Game game;
 
-  GameBoxArt({@required this.game});
+  GameBoxArt({@required this.token, @required this.game});
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +23,13 @@ class GameBoxArt extends StatelessWidget {
                     child: Image.network(snapshot.data.toString()),
                     tag: game.id);
               } else if (snapshot.hasError) {
-                return Text(snapshot.error);
+                return Text(snapshot.error as String);
               }
 
               return Column(
                 children: [
                   Padding(padding: EdgeInsets.all(20)),
-                  CircularProgressIndicator(),
+                  Text('Loading'),
                 ],
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -45,8 +45,9 @@ class GameBoxArt extends StatelessWidget {
 
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => GameScreen(game: game, cover: cover),
+              MaterialPageRoute<void>(
+                builder: (context) => GameScreen(
+                    game: game, cover: cover, runner: Runner.byToken(token)),
               ),
             );
           }),

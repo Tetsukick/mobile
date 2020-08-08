@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
-
 import 'package:splitsio/models/category.dart';
 import 'package:splitsio/models/game.dart';
 import 'package:splitsio/models/runner.dart';
@@ -51,48 +47,28 @@ class Run {
 
   factory Run.fromJson(Map<String, dynamic> json) {
     return Run(
-      id: json['id'],
-      srdcId: json['srdc_id'],
-      realtimeDuration: Duration(milliseconds: json['realtime_duration_ms']),
-      gametimeDuration: Duration(milliseconds: json['gametime_duration_ms']),
+      id: json['id'] as String,
+      srdcId: json['srdc_id'] as String,
+      realtimeDuration: Duration(milliseconds: json['realtime_duration_ms'] as int),
+      gametimeDuration: Duration(milliseconds: json['gametime_duration_ms'] as int),
       realtimeSumOfBest:
-          Duration(milliseconds: json['realtime_sum_of_best_ms']),
+          Duration(milliseconds: json['realtime_sum_of_best_ms'] as int),
       gametimeSumOfBest:
-          Duration(milliseconds: json['gametime_sum_of_best_ms'] ?? 0),
+          Duration(milliseconds: json['gametime_sum_of_best_ms'] as int ?? 0),
       defaultTiming:
           json['default_timing'] == 'game' ? Timing.game : Timing.real,
-      program: json['program'],
-      attempts: json['attempts'],
-      parsedAt: DateTime.parse(json['parsed_at']),
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
-      game: Game.fromJson(json['game']),
-      category: Category.fromJson(json['category']),
+      program: json['program'] as String,
+      attempts: json['attempts'] as int,
+      parsedAt: DateTime.parse(json['parsed_at'] as String),
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      game: Game.fromJson(json['game'] as Map<String, dynamic>),
+      category: Category.fromJson(json['category'] as Map<String, dynamic>),
       //runners: json['runners'].map((runner) => Runner.fromJson(runner)), // TODO: Broken for some reason
       //segments: json['segments'].map((segment) => Segment.fromJson(segment)), // TODO: Broken for some reason
     );
   }
-
-  static Future<List<Run>> fetchPbs(
-      {Future<String> accessToken, Runner runner}) async {
-    final response = await http
-        .get('https://splits.io/api/v4/runners/${runner.name}/pbs', headers: {
-      "Authorization": "Bearer ${await accessToken}",
-    });
-
-    List<Run> runs = [];
-    if (response.statusCode == 200) {
-      final runsJson = JsonDecoder().convert(response.body)['pbs'];
-      for (var i = 0; i < runsJson.length; i++) {
-        runs.add(Run.fromJson(runsJson[i]));
-      }
-      return runs;
-    }
-
-    throw 'Cannot retrieve runs for user';
-  }
-
-  static Map<Game, List<Run>> byGame(List<Run> runs) {
+  static Map<Game, Iterable<Run>> byGame(Iterable<Run> runs) {
     Map<Game, List<Run>> m = Map<Game, List<Run>>();
     runs.forEach((run) {
       m.putIfAbsent(run.game, () => List<Run>());
@@ -115,9 +91,13 @@ class Run {
     }
 
     String twoDigitHours = twoDigits(d.inHours);
-    String twoDigitMinutes = twoDigits(d.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(d.inSeconds.remainder(60));
+    String twoDigitMinutes = twoDigits(d.inMinutes.remainder(60) as int);
+    String twoDigitSeconds = twoDigits(d.inSeconds.remainder(60) as int);
 
     return "$twoDigitHours:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+  Uri uri() {
+    return Uri.https('splits.io', id);
   }
 }

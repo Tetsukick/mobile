@@ -55,10 +55,6 @@ class LandingPage extends StatelessWidget {
     usedCodes.add(uri.queryParameters['code']);
 
     try {
-      Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
-        return Scaffold(body: Center(child: CircularProgressIndicator()));
-      }));
-
       final response = await http.post("https://splits.io/oauth/token", body: {
         "grant_type": "authorization_code",
         "client_id": clientId,
@@ -106,10 +102,10 @@ class LandingPage extends StatelessWidget {
         );
       });
 
-      Navigator.push(context,
+      Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute<void>(builder: (BuildContext context) {
         return IndexScreen(runner: runner, token: token);
-      }));
+      }), (Route<dynamic> _) => false);
     } on PlatformException {}
   }
 

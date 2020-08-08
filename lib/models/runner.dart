@@ -45,8 +45,7 @@ class Runner {
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
     );
-    // Might as well start fetching the cover now, as we know we'll need it
-    runner.pbs();
+    runner.pbs(); // Start fetching now
     return runner;
   }
 

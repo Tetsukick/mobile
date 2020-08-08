@@ -18,7 +18,6 @@ class GameBoxArt extends StatelessWidget {
             future: game.cover(),
             builder: (BuildContext context, AsyncSnapshot<Uri> snapshot) {
               if (snapshot.hasData) {
-                //return Image.network(snapshot.data.toString());
                 return Hero(
                     child: Image.network(snapshot.data.toString()),
                     tag: game.id);

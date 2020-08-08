@@ -77,9 +77,6 @@ class Auth {
       return;
     }
     _usedCodes.add(uri.queryParameters['code']);
-    Navigator.push(context, MaterialPageRoute<void>(builder: (context) {
-      return Scaffold(body: Center(child: CircularProgressIndicator()));
-    }));
 
     final http.Response response =
         await http.post("https://splits.io/oauth/token", body: {

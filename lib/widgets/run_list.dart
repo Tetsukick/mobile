@@ -89,7 +89,7 @@ class RunList extends StatelessWidget {
         return Column(
           children: [
             Padding(padding: EdgeInsets.all(20)),
-            CircularProgressIndicator()
+            CircularProgressIndicator(),
           ],
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

@@ -7,37 +7,36 @@ class Logo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-      Hero(
-        child: Material(
-          child: Row(
-            children: <Widget>[
-              Image.asset(
-                'assets/images/logo-skinny.png',
-                height: size,
-              ),
-              Padding(padding: EdgeInsets.all(3)),
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'plits.io',
-                      style: TextStyle(
-                        fontFamily: 'Bukhari Script',
-                        fontSize: size,
-                      ),
+    return Hero(
+      child: Material(
+        child: Row(
+          children: <Widget>[
+            Image.asset(
+              'assets/images/logo-skinny.png',
+              height: size,
+            ),
+            Padding(padding: EdgeInsets.all(3)),
+            Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Splits.io'.substring(1),
+                    style: TextStyle(
+                      fontFamily: 'Bukhari Script',
+                      fontSize: size,
                     ),
-                  ],
-                  style: TextStyle(
-                      fontFamily: 'Bukhari Script Alternates', fontSize: size),
-                  text: 'S',
-                ),
+                  ),
+                ],
+                style: TextStyle(
+                    fontFamily: 'Bukhari Script Alternates', fontSize: size),
+                text: 'Splits.io'[0],
               ),
-            ],
-          ),
-          color: Colors.transparent,
+            ),
+          ],
         ),
-        tag: 'logo',
-      );
+        color: Colors.transparent,
+      ),
+      tag: 'logo',
+    );
   }
 }

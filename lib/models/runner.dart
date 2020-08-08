@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import 'package:splitsio/models/game.dart';
 import 'package:splitsio/models/run.dart';
 
 class Runner {
@@ -47,10 +48,31 @@ class Runner {
       return Runner.fromJson(JsonDecoder().convert(response.body)['runner']);
     }
 
-    throw 'Cannot retrieve logged-in user from API. Maybe you do not have any runs?';
+    throw "Error: Can't retrieve user from Splits.io API. Got status ${response.statusCode}";
   }
 
   Future<List<Run>> pbs(Future<String> accessToken) {
     return Run.fetchPbs(accessToken: accessToken, runner: this);
+  }
+
+  Future<List<Game>> games(Future<String> accessToken) async {
+    final uri = Uri(
+        scheme: 'https',
+        host: 'splits.io',
+        pathSegments: ['api', 'v4', 'runners', this.name, 'games']);
+    final response = await http.get(uri, headers: {
+      "Authorization": "Bearer ${await accessToken}",
+    });
+
+    List<Game> games = [];
+    if (response.statusCode == 200) {
+      final gamesJson = JsonDecoder().convert(response.body)['games'];
+      for (var i = 0; i < gamesJson.length; i++) {
+        games.add(Game.fromJson(gamesJson[i]));
+      }
+      return games;
+    }
+
+    throw 'Cannot retrieve games for user';
   }
 }

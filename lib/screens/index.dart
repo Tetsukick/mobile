@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:splitsio/models/runner.dart';
 import 'package:splitsio/widgets/logo.dart';
-import 'package:splitsio/widgets/run_list.dart';
+import 'package:splitsio/widgets/game_list.dart';
 
 class IndexScreen extends StatelessWidget {
   final Future<Runner> runner;
@@ -30,13 +30,9 @@ class IndexScreen extends StatelessWidget {
           appBar: AppBar(
             title: Logo(size: 22),
           ),
-          body: ListView(
-            children: [
-              RunList(
-                runner: runner,
-                accessToken: storage.read(key: 'splitsio_access_token'),
-              ),
-            ],
+          body: GameList(
+            runner: runner,
+            accessToken: storage.read(key: 'splitsio_access_token'),
           ),
           /*
           floatingActionButton: FloatingActionButton(

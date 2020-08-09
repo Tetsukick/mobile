@@ -11,7 +11,7 @@ import 'package:splitsio/models/run.dart';
 
 class Runner {
   static final storage = new FlutterSecureStorage();
-  static final _byToken = new Map<String, Runner>();
+  static Future<Runner> _me;
 
   final String id;
   final String twitchId;
@@ -49,23 +49,23 @@ class Runner {
     return runner;
   }
 
-  static Future<Runner> byToken(String accessToken) async {
-    if (_byToken[accessToken] != null) {
-      return _byToken[accessToken];
+  static Future<Runner> me() async {
+    if (_me != null) {
+      return _me;
     }
 
-    final response =
-        await http.get('https://splits.io/api/v4/runner', headers: {
-      "Authorization": "Bearer $accessToken",
+    _me = Auth.http
+        .get('https://splits.io/api/v4/runner')
+        .then((http.Response response) {
+      if (response.statusCode == 200) {
+        return Runner.fromJson(JsonDecoder().convert(response.body)['runner']
+            as Map<String, dynamic>);
+      }
+
+      throw "Error: Can't retrieve user from Splits.io API. Got status ${response.statusCode}";
     });
 
-    if (response.statusCode == 200) {
-      Runner runner = Runner.fromJson(JsonDecoder()
-          .convert(response.body)['runner'] as Map<String, dynamic>);
-      _byToken[accessToken] = runner;
-      return runner;
-    }
-    throw "Error: Can't retrieve user from Splits.io API. Got status ${response.statusCode}";
+    return _me;
   }
 
   Future<List<Game>> games() async {
@@ -73,9 +73,7 @@ class Runner {
         scheme: 'https',
         host: 'splits.io',
         pathSegments: ['api', 'v4', 'runners', this.name, 'games']);
-    final response = await http.get(uri, headers: {
-      "Authorization": "Bearer ${await Auth.token()}",
-    });
+    final response = await Auth.http.get(uri.toString());
 
     List<Game> games = [];
     if (response.statusCode == 200) {
@@ -95,9 +93,9 @@ class Runner {
       return _pbs;
     }
 
-    _pbs = http.get('https://splits.io/api/v4/runners/${name}/pbs', headers: {
-      "Authorization": "Bearer ${await Auth.token()}",
-    }).then((http.Response response) {
+    _pbs = Auth.http
+        .get('https://splits.io/api/v4/runners/${name}/pbs')
+        .then((http.Response response) {
       List<Run> runs = [];
       if (response.statusCode == 200) {
         final List<dynamic> runsJson =

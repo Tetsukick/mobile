@@ -9,12 +9,11 @@ import 'package:splitsio/widgets/landing_page.dart';
 import 'package:splitsio/widgets/logo.dart';
 
 class IndexScreen extends StatelessWidget {
-  final String token;
   static final storage = new FlutterSecureStorage();
 
   final Future<Runner> runner;
 
-  IndexScreen({@required this.token, @required this.runner});
+  IndexScreen({@required this.runner});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +47,6 @@ class IndexScreen extends StatelessWidget {
             title: Logo(size: 22),
           ),
           body: GameList(
-            token: token,
             runner: runner,
           ),
           /*

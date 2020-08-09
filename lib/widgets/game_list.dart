@@ -5,10 +5,9 @@ import 'package:splitsio/models/runner.dart';
 import 'package:splitsio/widgets/game_box_art.dart';
 
 class GameList extends StatelessWidget {
-  final String token;
   final Future<Runner> runner;
 
-  GameList({@required this.token, @required this.runner});
+  GameList({@required this.runner});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class GameList extends StatelessWidget {
         if (snapshot.hasData) {
           return GridView.count(
             children: snapshot.data
-                .map((Game game) => GameBoxArt(game: game, token: token))
+                .map((Game game) => GameBoxArt(game: game))
                 .toList(),
             crossAxisCount: 2,
             mainAxisSpacing: 10,

@@ -5,10 +5,9 @@ import 'package:splitsio/models/runner.dart';
 import 'package:splitsio/screens/game.dart';
 
 class GameBoxArt extends StatelessWidget {
-  final String token;
   final Game game;
 
-  GameBoxArt({@required this.token, @required this.game});
+  GameBoxArt({@required this.game});
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +44,8 @@ class GameBoxArt extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute<void>(
-                builder: (context) => GameScreen(
-                    game: game, cover: cover, runner: Runner.byToken(token)),
+                builder: (context) =>
+                    GameScreen(game: game, cover: cover, runner: Runner.me()),
               ),
             );
           }),

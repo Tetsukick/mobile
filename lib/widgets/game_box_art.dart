@@ -18,7 +18,11 @@ class GameBoxArt extends StatelessWidget {
             builder: (BuildContext context, AsyncSnapshot<Uri> snapshot) {
               if (snapshot.hasData) {
                 return Hero(
-                    child: Image.network(snapshot.data.toString()),
+                    child: snapshot.data == Game.defaultCover
+                        ? Container(
+                            child: Center(child: Text(game.name)),
+                            decoration: BoxDecoration(border: Border.all()))
+                        : Image.network(snapshot.data.toString()),
                     tag: game.id);
               } else if (snapshot.hasError) {
                 return Text(snapshot.error as String);

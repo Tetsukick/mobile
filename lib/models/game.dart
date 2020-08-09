@@ -61,6 +61,10 @@ class Game {
       return _cover;
     }
 
+    if (srdcId == null) {
+      return Future.value(defaultCover);
+    }
+
     // Save the future for later so that:
     // 1. If another call to cover() is made before the future resolves, we don't queue another future to fetch another identical cover URI
     // 2. If another call to cover() is made after the future resolves, we reuse the fetched content

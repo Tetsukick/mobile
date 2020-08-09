@@ -27,7 +27,7 @@ class GameList extends StatelessWidget {
             padding: EdgeInsets.all(10),
           );
         } else if (snapshot.hasError) {
-          return Text(snapshot.error as String);
+          return Text('${snapshot.error}');
         }
 
         return Center(

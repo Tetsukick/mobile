@@ -47,12 +47,12 @@ class Runner {
   }
 
   static Future<Runner> me() async {
-    if (_me != null) {
-      return _me;
+    if (Auth.demo) {
+      return Runner(id: '38310', name: 'splitsio_ios_review');
     }
 
-    if (Auth.demo) {
-      return Runner(id: '1', name: 'Glacials');
+    if (_me != null) {
+      return _me;
     }
 
     _me = Auth.http
@@ -70,11 +70,7 @@ class Runner {
   }
 
   Future<List<Game>> games() async {
-    final uri = Uri(
-        scheme: 'https',
-        host: 'splits.io',
-        pathSegments: ['api', 'v4', 'runners', this.name, 'games']);
-    final response = await Auth.http.get(uri.toString());
+    final response = await http.get('https://splits.io/api/v4/runners/$name/games');
 
     List<Game> games = [];
     if (response.statusCode == 200) {
@@ -94,8 +90,8 @@ class Runner {
       return _pbs;
     }
 
-    _pbs = Auth.http
-        .get('https://splits.io/api/v4/runners/${name}/pbs')
+    _pbs = http
+        .get('https://splits.io/api/v4/runners/$name/pbs')
         .then((http.Response response) {
       List<Run> runs = [];
       if (response.statusCode == 200) {
@@ -113,6 +109,6 @@ class Runner {
   }
 
   Future<Iterable<Run>> pbsByGame(Game game) async {
-    return pbs().then((pbs) => pbs.where((run) => run.game.id == game.id));
+    return pbs().then((pbs) => pbs.where((run) => run.game != null && run.game.id == game.id));
   }
 }

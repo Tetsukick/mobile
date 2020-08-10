@@ -29,12 +29,13 @@ class LandingPage extends StatelessWidget {
         floatingActionButton: InkWell(
             child: FloatingActionButton(
               child: Icon(Icons.arrow_forward),
-              onPressed: () => [
+              onPressed: () {
+                Auth.demo = false;
                 Navigator.pushAndRemoveUntil(context,
                     MaterialPageRoute<void>(builder: (BuildContext context) {
                   return IndexScreen(runner: Runner.me());
-                }), (route) => false)
-              ],
+                }), (route) => false);
+              },
             ),
             onLongPress: () {
               Auth.demo = true;

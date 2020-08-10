@@ -35,6 +35,10 @@ class Game {
   });
 
   factory Game.fromJson(Map<String, dynamic> json) {
+    if (json == null) {
+      return null;
+    }
+
     if (cached.containsKey(json['id'])) {
       return cached[json['id']];
     }
@@ -56,13 +60,13 @@ class Game {
     return game;
   }
 
-  Future<Uri> cover() {
+  Future<Uri> cover() async {
     if (_cover != null) {
       return _cover;
     }
 
     if (srdcId == null) {
-      return Future.value(defaultCover);
+      return defaultCover;
     }
 
     // Save the future for later so that:
@@ -74,15 +78,15 @@ class Game {
             host: 'speedrun.com',
             pathSegments: ['api', 'v1', 'games', srdcId]))
         .then((http.Response response) {
-      Map<String, dynamic> game =
-          JsonDecoder().convert(response.body)['data'] as Map<String, dynamic>;
-      if (game != null && game['assets']['cover-large']['uri'] != null) {
-        try {
+      try {
+        Map<String, dynamic> game = JsonDecoder().convert(response.body)['data']
+            as Map<String, dynamic>;
+        if (game != null && game['assets']['cover-large']['uri'] != null) {
           return Uri.parse(game['assets']['cover-large']['uri'] as String);
-        } on FormatException catch (error) {
-          stderr.writeln(error);
-          return defaultCover;
         }
+      } on FormatException catch (error) {
+        stderr.writeln(error);
+        return defaultCover;
       }
 
       // Fallback placeholder image

@@ -24,7 +24,7 @@ class RunList extends StatelessWidget {
               children: snapshot.data
                   .toList()
                   .map(
-                    (run) => Card(
+                    (Run run) => Card(
                         child: Container(
                             child: Padding(
                                 child: OutlineButton(
@@ -62,7 +62,15 @@ class RunList extends StatelessWidget {
           throw snapshot.error;
         }
 
-        return Container();
+        return Center(
+            child: Column(
+          children: [
+            Padding(padding: EdgeInsets.all(20)),
+            CircularProgressIndicator(),
+          ],
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+        ));
       },
     );
   }

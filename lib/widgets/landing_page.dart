@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:splitsio/models/auth.dart';
 
 import 'package:splitsio/models/runner.dart';
 import 'package:splitsio/screens/index.dart';
@@ -25,15 +26,23 @@ class LandingPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
         ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.arrow_forward),
-          onPressed: () => [
-            Navigator.pushAndRemoveUntil(context,
-                MaterialPageRoute<void>(builder: (BuildContext context) {
-              return IndexScreen(runner: Runner.me());
-            }), (route) => false)
-          ],
-        ),
+        floatingActionButton: InkWell(
+            child: FloatingActionButton(
+              child: Icon(Icons.arrow_forward),
+              onPressed: () => [
+                Navigator.pushAndRemoveUntil(context,
+                    MaterialPageRoute<void>(builder: (BuildContext context) {
+                  return IndexScreen(runner: Runner.me());
+                }), (route) => false)
+              ],
+            ),
+            onLongPress: () {
+              Auth.demo = true;
+              Navigator.pushAndRemoveUntil(context,
+                  MaterialPageRoute<void>(builder: (BuildContext context) {
+                return IndexScreen(runner: Runner.me());
+              }), (route) => false);
+            }),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat);
   }
 }

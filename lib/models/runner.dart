@@ -51,6 +51,10 @@ class Runner {
       return _me;
     }
 
+    if (Auth.demo) {
+      return Runner(id: '1', name: 'Glacials');
+    }
+
     _me = Auth.http
         .get('https://splits.io/api/v4/runner')
         .then((http.Response response) {

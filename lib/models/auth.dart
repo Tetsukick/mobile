@@ -14,6 +14,10 @@ class SplitsioOAuth2Client extends OAuth2Client {
         );
 }
 
+class SplitsioDemoHelper extends OAuth2Helper {
+  SplitsioDemoHelper(OAuth2Client client) : super(client);
+}
+
 class Auth {
   static const clientId = "qRWoaDNtJnPMnsoR-oh89t40_9RozQMjSv04-hVDnBg";
   static const clientSecret = "wlWBUaImnBlP0gs8MTNisM4qfL7WTrFPzMkp8Z4L-1Q";
@@ -21,6 +25,7 @@ class Auth {
       Set.from(<String>['upload_run', 'delete_run', 'manage_race']);
   static const customUriScheme =
       'splitsio'; // Must be kept in sync with AndroidManifest.xml & Info.plist
+  static bool demo = false;
 
   static final OAuth2Helper http = OAuth2Helper(
       SplitsioOAuth2Client(

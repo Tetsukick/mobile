@@ -3,14 +3,11 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'package:splitsio/models/auth.dart';
 import 'package:splitsio/models/game.dart';
 import 'package:splitsio/models/run.dart';
 
 class Runner {
-  static final storage = new FlutterSecureStorage();
   static Future<Runner> _me;
 
   final String id;

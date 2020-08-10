@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-import 'package:splitsio/models/auth.dart';
 import 'package:splitsio/models/runner.dart';
 import 'package:splitsio/widgets/game_list.dart';
 import 'package:splitsio/widgets/landing_page.dart';
 import 'package:splitsio/widgets/logo.dart';
 
 class IndexScreen extends StatelessWidget {
-  static final storage = new FlutterSecureStorage();
-
   final Future<Runner> runner;
 
   IndexScreen({@required this.runner});
@@ -36,7 +31,6 @@ class IndexScreen extends StatelessWidget {
               IconButton(
                   icon: Icon(Icons.exit_to_app),
                   onPressed: () async {
-                    await Auth.clear();
                     Navigator.push(
                       context,
                       MaterialPageRoute<void>(builder: (BuildContext context) {

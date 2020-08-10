@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
@@ -55,22 +56,27 @@ class Runner {
       return _me;
     }
 
-    _me = Auth.http
-        .get('https://splits.io/api/v4/runner')
-        .then((http.Response response) {
-      if (response.statusCode == 200) {
-        return Runner.fromJson(JsonDecoder().convert(response.body)['runner']
-            as Map<String, dynamic>);
-      }
+    try {
+      _me = Auth.http
+          .get('https://splits.io/api/v4/runner')
+          .then((http.Response response) {
+        if (response.statusCode == 200) {
+          return Runner.fromJson(JsonDecoder().convert(response.body)['runner']
+              as Map<String, dynamic>);
+        }
 
-      throw "Error: Can't retrieve user from Splits.io API. Got status ${response.statusCode}";
-    });
+        throw "Error: Can't retrieve user from Splits.io API. Got status ${response.statusCode}";
+      });
+    } catch (PlatformException) {
+      stderr.write("User declined to sign in");
+    }
 
     return _me;
   }
 
   Future<List<Game>> games() async {
-    final response = await http.get('https://splits.io/api/v4/runners/$name/games');
+    final response =
+        await http.get('https://splits.io/api/v4/runners/$name/games');
 
     List<Game> games = [];
     if (response.statusCode == 200) {
@@ -109,6 +115,7 @@ class Runner {
   }
 
   Future<Iterable<Run>> pbsByGame(Game game) async {
-    return pbs().then((pbs) => pbs.where((run) => run.game != null && run.game.id == game.id));
+    return pbs().then((pbs) =>
+        pbs.where((run) => run.game != null && run.game.id == game.id));
   }
 }

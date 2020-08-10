@@ -24,6 +24,7 @@ class Splitsio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Splits.io',
       theme: ThemeData(
         accentColor: Colors.amber,

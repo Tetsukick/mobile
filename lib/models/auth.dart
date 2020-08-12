@@ -18,6 +18,8 @@ class SplitsioDemoHelper extends OAuth2Helper {
   SplitsioDemoHelper(OAuth2Client client) : super(client);
 }
 
+class UserCanceledException {}
+
 class Auth {
   static const clientId = "qRWoaDNtJnPMnsoR-oh89t40_9RozQMjSv04-hVDnBg";
   static const clientSecret = "wlWBUaImnBlP0gs8MTNisM4qfL7WTrFPzMkp8Z4L-1Q";

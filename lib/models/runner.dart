@@ -8,6 +8,7 @@ import 'package:splitsio/models/auth.dart';
 import 'package:splitsio/models/game.dart';
 import 'package:splitsio/models/run.dart';
 
+
 class Runner {
   static Future<Runner> _me;
 
@@ -56,19 +57,19 @@ class Runner {
       return _me;
     }
 
-    try {
-      _me = Auth.http
-          .get('https://splits.io/api/v4/runner')
-          .then((http.Response response) {
-        if (response.statusCode == 200) {
-          return Runner.fromJson(JsonDecoder().convert(response.body)['runner']
-              as Map<String, dynamic>);
-        }
+    http.Response response;
 
-        throw "Error: Can't retrieve user from Splits.io API. Got status ${response.statusCode}";
-      });
+    try {
+      response = await Auth.http.get('https://splits.io/api/v4/runner');
     } catch (PlatformException) {
-      stderr.write("User declined to sign in");
+      throw UserCanceledException();
+    }
+
+    if (response.statusCode == 200) {
+      _me = Future.value(Runner.fromJson(JsonDecoder()
+          .convert(response.body)['runner'] as Map<String, dynamic>));
+    } else {
+      throw "Error: Can't retrieve user from Splits.io API. Got status ${response.statusCode}";
     }
 
     return _me;

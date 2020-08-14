@@ -6,6 +6,23 @@ import 'package:splitsio/screens/demo_sign_in.dart';
 import 'package:splitsio/screens/index.dart';
 import 'package:splitsio/widgets/logo.dart';
 
+Color twitchPurple = Color(0xFF916FF);
+ColorScheme twitchColorScheme = ColorScheme(
+  background: twitchPurple,
+  brightness: Brightness.dark,
+  error: Colors.red,
+  onBackground: twitchPurple,
+  onError: Colors.white,
+  onPrimary: twitchPurple,
+  onSecondary: Colors.white,
+  onSurface: Colors.white,
+  primary: twitchPurple,
+  primaryVariant: twitchPurple,
+  secondary: twitchPurple,
+  secondaryVariant: twitchPurple,
+  surface: Colors.white,
+);
+
 class LandingPage extends StatelessWidget {
   LandingPage() : super();
 
@@ -26,18 +43,21 @@ class LandingPage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(20),
           ),
-          RaisedButton(
-            color: Color(0xFF9146FF),
-            child: const Text(
-              'Sign in with Twitch',
+          ButtonTheme(
+            child: RaisedButton(
+              child: const Text(
+                'Sign in with Twitch',
+              ),
+              onPressed: () {
+                Auth.demo = false;
+                Navigator.pushAndRemoveUntil(context,
+                    MaterialPageRoute<void>(builder: (BuildContext context) {
+                  return IndexScreen(runner: Runner.me());
+                }), (route) => false);
+              },
             ),
-            onPressed: () {
-              Auth.demo = false;
-              Navigator.pushAndRemoveUntil(context,
-                  MaterialPageRoute<void>(builder: (BuildContext context) {
-                return IndexScreen(runner: Runner.me());
-              }), (route) => false);
-            },
+            textTheme: ButtonTextTheme.normal,
+            colorScheme: twitchColorScheme,
           ),
           FlatButton(
             child: const Text(

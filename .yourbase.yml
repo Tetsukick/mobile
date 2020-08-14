@@ -1,0 +1,20 @@
+dependencies:
+  build:
+    - flutter:latest
+
+build_targets:
+  - name: android
+    commands:
+      - flutter build appbundle
+  - name: ios
+    commands:
+      - echo "iOS builds not implemented yet"
+
+ci:
+  builds:
+    - name: android
+      build_target: android
+      when: tagged is true
+    - name: ios
+      build_target: android
+      when: tagged is true

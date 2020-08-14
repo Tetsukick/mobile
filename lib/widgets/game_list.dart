@@ -20,12 +20,11 @@ class GameList extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<List<Game>> snapshot) {
         if (snapshot.hasData) {
           return GridView.count(
+            childAspectRatio: 0.71,
             children: snapshot.data
                 .map((Game game) => GameBoxArt(game: game))
                 .toList(),
-            crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            padding: EdgeInsets.all(10),
+            crossAxisCount: 3,
           );
         } else if (snapshot.hasError) {
           // Without a forced delay, Flutter will hit an error due to Navigation

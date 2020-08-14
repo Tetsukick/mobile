@@ -52,7 +52,7 @@ class LandingPage extends StatelessWidget {
                 Auth.demo = false;
                 Navigator.pushAndRemoveUntil(context,
                     MaterialPageRoute<void>(builder: (BuildContext context) {
-                  return IndexScreen(runner: Runner.me());
+                  return IndexScreen(runner: Runner.me(context));
                 }), (route) => false);
               },
             ),

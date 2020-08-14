@@ -17,7 +17,7 @@ class RunList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: runner.then((runner) => runner.pbsByGame(game)),
+      future: runner.then((runner) => runner.pbsByGame(context, game)),
       builder: (BuildContext context, AsyncSnapshot<Iterable<Run>> snapshot) {
         if (snapshot.hasData) {
           return Column(

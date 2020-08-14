@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:splitsio/models/auth.dart';
 import 'package:splitsio/models/game.dart';
 import 'package:splitsio/models/run.dart';
-
 
 class Runner {
   static Future<Runner> _me;
@@ -32,7 +32,7 @@ class Runner {
       this.createdAt,
       this.updatedAt});
 
-  factory Runner.fromJson(Map<String, dynamic> json) {
+  factory Runner.fromJson(BuildContext context, Map<String, dynamic> json) {
     Runner runner = Runner(
       id: json['id'] as String,
       twitchId: json['twitch_id'] as String,
@@ -43,11 +43,11 @@ class Runner {
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
     );
-    runner.pbs(); // Start fetching now
+    runner.pbs(context); // Start fetching now
     return runner;
   }
 
-  static Future<Runner> me() async {
+  static Future<Runner> me(BuildContext context) async {
     if (Auth.demo) {
       return Runner(id: '38310', name: 'splitsio_ios_review');
     }
@@ -65,8 +65,10 @@ class Runner {
     }
 
     if (response.statusCode == 200) {
-      _me = Future.value(Runner.fromJson(JsonDecoder()
-          .convert(response.body)['runner'] as Map<String, dynamic>));
+      _me = Future.value(Runner.fromJson(
+          context,
+          JsonDecoder().convert(response.body)['runner']
+              as Map<String, dynamic>));
     } else {
       throw "Error: Can't retrieve user from Splits.io API. Got status ${response.statusCode}";
     }
@@ -74,24 +76,32 @@ class Runner {
     return _me;
   }
 
-  Future<List<Game>> games() async {
+  Future<List<Game>> games(BuildContext context) async {
     final response =
         await http.get('https://splits.io/api/v4/runners/$name/games');
+
+    List<Future<Uri>> futures = [];
 
     List<Game> games = [];
     if (response.statusCode == 200) {
       final List<dynamic> gamesJson =
           JsonDecoder().convert(response.body)['games'] as List<dynamic>;
       for (var i = 0; i < gamesJson.length; i++) {
-        games.add(Game.fromJson(gamesJson[i] as Map<String, dynamic>));
+        Game game = Game.fromJson(gamesJson[i] as Map<String, dynamic>);
+        games.add(game);
+        futures.add(game.cover());
       }
+      // Precache images, otherwise the UX of images slowly popping in will be bad
+      List<Uri> covers = await Future.wait<Uri>(futures);
+      await Future.wait<void>(covers.map((cover) =>
+          precacheImage(Image.network(cover.toString()).image, context)));
       return games;
     }
 
     throw 'Cannot retrieve games for user $id $name';
   }
 
-  Future<List<Run>> pbs() async {
+  Future<List<Run>> pbs(BuildContext context) async {
     if (_pbs != null) {
       return _pbs;
     }
@@ -114,8 +124,8 @@ class Runner {
     return _pbs;
   }
 
-  Future<Iterable<Run>> pbsByGame(Game game) async {
-    return pbs().then((pbs) =>
+  Future<Iterable<Run>> pbsByGame(BuildContext context, Game game) async {
+    return pbs(context).then((pbs) =>
         pbs.where((run) => run.game != null && run.game.id == game.id));
   }
 }

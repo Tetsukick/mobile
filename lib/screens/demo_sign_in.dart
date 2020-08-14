@@ -47,7 +47,7 @@ class SignInFormState extends State<SignInForm> {
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute<void>(builder: (BuildContext context) {
         Auth.demo = true;
-        return IndexScreen(runner: Runner.me());
+        return IndexScreen(runner: Runner.me(context));
       }), (route) => false);
     }
   }

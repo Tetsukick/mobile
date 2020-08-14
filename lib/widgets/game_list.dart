@@ -16,7 +16,7 @@ class GameList extends StatelessWidget {
     //runner.then((Runner runner) => runner.pbs());
 
     return FutureBuilder(
-      future: runner.then((runner) => runner.games()),
+      future: runner.then((runner) => runner.games(context)),
       builder: (BuildContext context, AsyncSnapshot<List<Game>> snapshot) {
         if (snapshot.hasData) {
           return GridView.count(

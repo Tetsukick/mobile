@@ -49,7 +49,7 @@ class GameBoxArt extends StatelessWidget {
               context,
               MaterialPageRoute<void>(
                 builder: (context) =>
-                    GameScreen(game: game, cover: cover, runner: Runner.me()),
+                    GameScreen(game: game, cover: cover, runner: Runner.me(context)),
               ),
             );
           }),

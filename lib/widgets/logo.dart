@@ -34,7 +34,7 @@ class Logo extends StatelessWidget {
             ),
           ],
         ),
-        color: Colors.transparent,
+        type: MaterialType.transparency,
       ),
       tag: 'logo',
     );

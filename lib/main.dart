@@ -27,8 +27,9 @@ class Splitsio extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Splits.io',
       theme: ThemeData(
-        accentColor: Colors.amber,
-        primarySwatch: Colors.amber,
+        accentColor: Colors.white,
+        brightness: Brightness.light,
+        primarySwatch: Colors.lime,
       ),
       darkTheme: ThemeData(
         accentColor: Colors.amber,

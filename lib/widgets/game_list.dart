@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:splitsio/main.dart';
 import 'package:splitsio/models/game.dart';
 import 'package:splitsio/models/runner.dart';
 import 'package:splitsio/widgets/game_box_art.dart';

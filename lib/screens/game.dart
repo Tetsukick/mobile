@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'package:splitsio/models/game.dart';
@@ -21,20 +23,29 @@ class GameScreen extends StatelessWidget {
     return PageView(children: [
       Scaffold(
         appBar: AppBar(title: Text("${game.name} PBs")),
-        body: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                colorFilter: new ColorFilter.mode(
-                    Colors.black.withOpacity(0.1), BlendMode.dstATop),
-                fit: BoxFit.cover,
-                image: NetworkImage(
-                  cover.toString(),
+        body: Stack(children: [
+          Hero(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.1), BlendMode.dstATop),
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                      cover.toString(),
+                    ),
+                  ),
                 ),
               ),
             ),
-            child: Column(children: [
-              Center(child: RunList(game: game, runner: runner)),
-            ])),
+            tag: game.id,
+          ),
+          BackdropFilter(
+              child: RunList(game: game, runner: runner),
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5)),
+        ]),
       )
     ]);
   }

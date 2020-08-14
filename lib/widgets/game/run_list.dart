@@ -1,12 +1,9 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:splitsio/widgets/landing_page.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:splitsio/main.dart';
 import 'package:splitsio/models/game.dart';
 import 'package:splitsio/models/run.dart';
 import 'package:splitsio/models/runner.dart';

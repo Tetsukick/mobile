@@ -3,8 +3,6 @@ import 'package:splitsio/models/auth.dart';
 import 'package:splitsio/models/runner.dart';
 import 'package:splitsio/screens/index.dart';
 
-import 'package:splitsio/widgets/game/run_list.dart';
-
 class DemoSignInScreen extends StatelessWidget {
   DemoSignInScreen();
 

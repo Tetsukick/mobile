@@ -8,6 +8,7 @@ build_targets:
   - name: android
     commands:
       - flutter build appbundle
+      - echo $ANDROID_KEY_BASE64 | base64 --decode > key.jks
   - name: ios
     commands:
       - echo "iOS builds not implemented yet"

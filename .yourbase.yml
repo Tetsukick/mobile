@@ -1,6 +1,6 @@
 dependencies:
   build:
-    - flutter:latest
+    - flutter:1.20.1
 
 build_targets:
   - name: android

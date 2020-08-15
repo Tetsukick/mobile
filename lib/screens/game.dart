@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import 'package:splitsio/models/game.dart';
+import 'package:splitsio/models/run.dart';
 import 'package:splitsio/models/runner.dart';
-import 'package:splitsio/widgets/game/run_list.dart';
+import 'package:splitsio/widgets/game_tab_controller.dart';
+import 'package:splitsio/widgets/loading_spinner.dart';
 
 class GameScreen extends StatelessWidget {
   final Game game;
@@ -20,33 +22,16 @@ class GameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PageView(children: [
-      Scaffold(
-        appBar: AppBar(title: Text("${game.name} PBs")),
-        body: Stack(children: [
-          Hero(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.1), BlendMode.dstATop),
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      cover.toString(),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            tag: game.id,
-          ),
-          BackdropFilter(
-              child: RunList(game: game, runner: runner),
-              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5)),
-        ]),
-      )
-    ]);
+    return FutureBuilder<Iterable<Run>>(
+        future: runner.then((runner) => runner.pbsByGame(context, game)),
+        builder: (BuildContext context, AsyncSnapshot<Iterable<Run>> snapshot) {
+          if (snapshot.hasData) {
+            return GameTabController(game: game, runs: snapshot.data, cover: cover);
+          } else if (snapshot.hasError) {
+            return Text(snapshot.error.toString());
+          }
+
+          return LoadingSpinner();
+        });
   }
 }

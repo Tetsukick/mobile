@@ -1,0 +1,76 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:splitsio/models/game.dart';
+import 'package:splitsio/models/run.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class GameTabController extends StatelessWidget {
+  final Game game;
+  final Iterable<Run> runs;
+  final Uri cover;
+
+  GameTabController(
+      {@required this.game, @required this.runs, @required this.cover});
+
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+        length: runs.length,
+        child: Scaffold(
+          appBar: AppBar(
+              bottom: TabBar(
+                  tabs:
+                      runs.map((run) => Tab(text: run.category.name)).toList()),
+              title: Text(game.name)),
+          body: Stack(children: [
+            Hero(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      colorFilter: ColorFilter.mode(
+                          Colors.black.withOpacity(0.1), BlendMode.dstATop),
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                        cover.toString(),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              tag: game.id,
+            ),
+            BackdropFilter(
+                child: TabBarView(
+                    children: runs
+                        .map((run) => Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: OutlineButton(
+                                      child: ListTile(
+                                        title: Text(run.duration(),
+                                            style: TextStyle(
+                                                fontFamily: 'monospace',
+                                                fontSize: 30)),
+                                        trailing: Icon(Icons.open_in_new),
+                                      ),
+                                      onPressed: () async {
+                                        if (await canLaunch(
+                                            run.uri().toString())) {
+                                          await launch(run.uri().toString());
+                                        } else {
+                                          throw 'Cannot open Splits.io in browser.';
+                                        }
+                                      }),
+                                )
+                              ],
+                            ))
+                        .toList()),
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5)),
+          ]),
+        ));
+  }
+}

@@ -24,38 +24,31 @@ class RunList extends StatelessWidget {
               children: snapshot.data
                   .toList()
                   .map(
-                    (Run run) => Card(
-                        child: Container(
-                            child: Padding(
-                                child: OutlineButton(
-                                  onPressed: () async {
-                                    if (await canLaunch(run.uri().toString())) {
-                                      await launch(run.uri().toString());
-                                    } else {
-                                      throw 'Cannot open Splits.io in browser.';
-                                    }
-                                  },
-                                  child: ListTile(
-                                      title: Text(run.category.name),
-                                      trailing: Text.rich(TextSpan(
-                                          text: run.duration(),
-                                          style: TextStyle(
-                                            fontFamily: 'monospace',
-                                            letterSpacing: -1,
-                                            fontSize: 18,
-                                          ),
-                                          children: [
-                                            WidgetSpan(
-                                                child: Padding(
-                                                    child:
-                                                        Icon(Icons.open_in_new),
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            10, 0, 0, 0)))
-                                          ]))),
-                                ),
-                                padding: EdgeInsets.only(
-                                    left: 10, right: 10, top: 5, bottom: 5)))),
+                    (Run run) => OutlineButton(
+                      child: ListTile(
+                          title: Text(run.category.name),
+                          trailing: Text.rich(TextSpan(
+                              text: run.duration(),
+                              style: TextStyle(
+                                fontFamily: 'monospace',
+                                letterSpacing: -1,
+                                fontSize: 18,
+                              ),
+                              children: [
+                                WidgetSpan(
+                                    child: Padding(
+                                        child: Icon(Icons.open_in_new),
+                                        padding:
+                                            EdgeInsets.fromLTRB(10, 0, 0, 0)))
+                              ]))),
+                      onPressed: () async {
+                        if (await canLaunch(run.uri().toString())) {
+                          await launch(run.uri().toString());
+                        } else {
+                          throw 'Cannot open Splits.io in browser.';
+                        }
+                      },
+                    ),
                   )
                   .toList());
         } else if (snapshot.hasError) {

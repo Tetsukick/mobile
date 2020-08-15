@@ -8,7 +8,8 @@ import 'package:splitsio/widgets/logo.dart';
 import 'package:splitsio/widgets/twitch_button.dart';
 
 class LandingPage extends StatelessWidget {
-  LandingPage() : super();
+  final String message;
+  LandingPage({this.message}) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +25,12 @@ class LandingPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
           ),
+          message == null
+              ? Container()
+              : Padding(
+                  padding: EdgeInsets.all(20),
+                ),
+          message == null ? Container() : Text(message),
           Padding(
             padding: EdgeInsets.all(20),
           ),
@@ -33,10 +40,10 @@ class LandingPage extends StatelessWidget {
             ),
             onPressed: () {
               Auth.demo = false;
-              Navigator.pushAndRemoveUntil(context,
+              Navigator.pushReplacement(context,
                   MaterialPageRoute<void>(builder: (BuildContext context) {
                 return IndexScreen(runner: Runner.me(context));
-              }), (route) => false);
+              }));
             },
           ),
           FlatButton(

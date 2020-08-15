@@ -24,7 +24,7 @@ class GameList extends StatelessWidget {
             children: snapshot.data
                 .map((Game game) => GameBoxArt(game: game))
                 .toList(),
-            crossAxisCount: 3,
+            crossAxisCount: 2,
           );
         } else if (snapshot.hasError) {
           // Without a forced delay, Flutter will hit an error due to Navigation

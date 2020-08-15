@@ -44,11 +44,11 @@ class SignInFormState extends State<SignInForm> {
       // If the form is valid, display a Snackbar.
       Scaffold.of(context).showSnackBar(SnackBar(content: Text('Signing in')));
 
-      Navigator.pushAndRemoveUntil(context,
+      Navigator.pushReplacement(context,
           MaterialPageRoute<void>(builder: (BuildContext context) {
         Auth.demo = true;
         return IndexScreen(runner: Runner.me(context));
-      }), (route) => false);
+      }));
     }
   }
 

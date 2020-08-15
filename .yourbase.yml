@@ -7,8 +7,8 @@ dependencies:
 build_targets:
   - name: android
     commands:
-      - flutter build appbundle
       - echo $ANDROID_KEY_BASE64 | base64 --decode > android/app/$ANDROID_KEYSTORE_PATH
+      - flutter build appbundle
   - name: ios
     commands:
       - echo "iOS builds not implemented yet"

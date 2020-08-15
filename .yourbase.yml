@@ -7,7 +7,7 @@ dependencies:
 build_targets:
   - name: android
     commands:
-      - echo $ANDROID_KEY_BASE64 | base64 --decode > android/app/$ANDROID_KEYSTORE_PATH
+      - bash hydrate_key.sh
       - flutter build appbundle
   - name: ios
     commands:

@@ -2,8 +2,8 @@ dependencies:
   build:
     - flutter:1.20.1
     - android:latest
-    - java:latest
-
+    - java:8.202.08
+    
 build_targets:
   - name: android
     commands:

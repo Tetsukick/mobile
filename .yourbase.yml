@@ -7,11 +7,18 @@ dependencies:
 build_targets:
   - name: android
     commands:
-      - bash hydrate_key.sh
-      - flutter build appbundle
+      - bash hydrate_keys.sh
+      - flutter build appbundle # --build-number ??? --build-name `git describe --tags --abbrev=0 --exact-match || git rev-parse --short head`
   - name: ios
     commands:
       - echo "iOS builds not implemented yet"
+  - name: release
+    build_after:
+      - android
+      - ios
+    commands:
+      - git clone https://github.com/german1608/android-bundle-uploader
+      - python android-bundle-uploader/main.py service-account-private-key.json io.splits ./build/app/outputs/bundle/release/app-release.aab beta
 
 ci:
   builds:
@@ -19,3 +26,5 @@ ci:
       build_target: android
     - name: ios
       build_target: ios
+    - name: release
+      build_target: release

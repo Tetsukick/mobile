@@ -30,6 +30,17 @@ def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+} else {
+    // Use environment variables if no file exists; useful for CI
+    //
+    // However one file must still be present, the key itself. See
+    // https://dev.to/cddelta/signing-flutter-android-apps-for-release-in-github-actions-2892
+    // for a solution (tldr; base64 encode it into an env var then output it
+    // back to a file as a CI step)
+    keystoreProperties.setProperty('keyAlias',      System.getenv('ANDROID_KEY_ALIAS'));
+    keystoreProperties.setProperty('keyPassword',   System.getenv('ANDROID_KEY_PASSWORD'));
+    keystoreProperties.setProperty('storeFile',     System.getenv('ANDROID_KEYSTORE_PATH'));
+    keystoreProperties.setProperty('storePassword', System.getenv('ANDROID_KEYSTORE_PASSWORD'));
 }
 
 android {

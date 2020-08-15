@@ -3,12 +3,12 @@ dependencies:
     - flutter:1.20.1
     - android:latest
     - java:8.202.08
-    
+
 build_targets:
   - name: android
     commands:
       - flutter build appbundle
-      - echo $ANDROID_KEY_BASE64 | base64 --decode > key.jks
+      - echo $ANDROID_KEY_BASE64 | base64 --decode > $ANDROID_KEYSTORE_PATH
   - name: ios
     commands:
       - echo "iOS builds not implemented yet"

@@ -8,6 +8,19 @@ enum Timing {
   game,
 }
 
+extension TimingExtension on Timing {
+  String get name {
+    switch (this) {
+      case Timing.real:
+        return 'realtime';
+      case Timing.game:
+        return 'gametime';
+      default:
+        return null;
+    }
+  }
+}
+
 class Run {
   final String id;
   final String srdcId;
@@ -49,8 +62,10 @@ class Run {
     return Run(
       id: json['id'] as String,
       srdcId: json['srdc_id'] as String,
-      realtimeDuration: Duration(milliseconds: json['realtime_duration_ms'] as int),
-      gametimeDuration: Duration(milliseconds: json['gametime_duration_ms'] as int),
+      realtimeDuration:
+          Duration(milliseconds: json['realtime_duration_ms'] as int),
+      gametimeDuration:
+          Duration(milliseconds: json['gametime_duration_ms'] as int),
       realtimeSumOfBest:
           Duration(milliseconds: json['realtime_sum_of_best_ms'] as int ?? 0),
       gametimeSumOfBest:
@@ -62,7 +77,9 @@ class Run {
       parsedAt: DateTime.parse(json['parsed_at'] as String),
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
-      game: json['game'] == null ? null : Game.fromJson(json['game'] as Map<String, dynamic>),
+      game: json['game'] == null
+          ? null
+          : Game.fromJson(json['game'] as Map<String, dynamic>),
       category: Category.fromJson(json['category'] as Map<String, dynamic>),
       //runners: json['runners'].map((runner) => Runner.fromJson(runner)), // TODO: Broken for some reason
       //segments: json['segments'].map((segment) => Segment.fromJson(segment)), // TODO: Broken for some reason

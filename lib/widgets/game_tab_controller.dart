@@ -65,7 +65,11 @@ class GameTabController extends StatelessWidget {
                                           throw 'Cannot open Splits.io in browser.';
                                         }
                                       }),
-                                )
+                                ),
+                                Text("from ${run.program}"),
+                                Text("on ${run.parsedAt}"),
+                                Text("after ${run.attempts} attempts"),
+                                Text("using ${run.defaultTiming.name}"),
                               ],
                             ))
                         .toList()),

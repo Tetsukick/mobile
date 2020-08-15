@@ -27,10 +27,12 @@ good and newbie-friendly Flutter development environment.
 
 ### Release pipeline
 
-#### CI
-Every push, the latest commit will be built by [YourBase][yourbase] and
-released to the open beta track ([web link][beta-web] / [Android
-link][beta-android]).
+#### CI/CD
+Every push, the latest commit will be built by [YourBase][yourbase], uploaded
+to the Google Play Console, reviewed by Google, then released to the
+open beta track (opt in from: [web][beta-web] / [Android][beta-android]).
+The Google review process may take several hours, but no manual action is
+required to release it into beta afterwards.
 
 [yourbase]: https://yourbase.io/
 [beta-web]: https://play.google.com/apps/testing/io.splits

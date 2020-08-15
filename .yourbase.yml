@@ -6,11 +6,6 @@ dependencies:
 build_targets:
   - name: android
     commands:
-      - sdkmanager --install tools
-      - sdkmanager --install platform-tools
-      - sdkmanager --install build-tools;28.0.3
-      - sdkmanager --install platforms;android-28
-      - sdkmanager --install system-images;android-28;default;x86_64
       - flutter build appbundle
   - name: ios
     commands:
@@ -20,7 +15,5 @@ ci:
   builds:
     - name: android
       build_target: android
-      when: tagged is true
     - name: ios
-      build_target: android
-      when: tagged is true
+      build_target: ios

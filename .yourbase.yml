@@ -18,7 +18,7 @@ build_targets:
       - android
       - ios
     commands:
-      - git clone https://github.com/german1608/android-bundle-uploader
+      - git clone https://github.com/glacials/android-bundle-uploader
       - pip install -r android-bundle-uploader/requirements.txt
       - python android-bundle-uploader/main.py service-account-private-key.json io.splits ./build/app/outputs/bundle/release/app-release.aab beta
 

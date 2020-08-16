@@ -20,7 +20,7 @@ build_targets:
     commands:
       - git clone https://github.com/glacials/android-bundle-uploader
       - pip install -r android-bundle-uploader/requirements.txt
-      - python android-bundle-uploader/main.py service-account-private-key.json io.splits ./build/app/outputs/bundle/release/app-release.aab beta --release-notes en-US 'Thanks for using Splits.io :)'
+      - android-bundle-uploader/main.py service-account-private-key.json io.splits ./build/app/outputs/bundle/release/app-release.aab beta --release-notes en-US 'Thanks for using Splits.io :)'
 
 ci:
   builds:

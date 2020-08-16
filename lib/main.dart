@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:splitsio/sentry.dart';
-import 'package:splitsio/widgets/landing_page.dart';
+import 'package:splitsio/screens/landing_page.dart';
 
 void main() => runZonedGuarded<Future<void>>(() async {
       FlutterError.onError = (FlutterErrorDetails details) {

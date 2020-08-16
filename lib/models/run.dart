@@ -36,8 +36,8 @@ class Run {
   final DateTime updatedAt;
   final Game game;
   final Category category;
-  final List<Runner> runners;
-  final List<Segment> segments;
+  final Iterable<Runner> runners;
+  final Iterable<Segment> segments;
 
   Run({
     this.id,
@@ -81,8 +81,13 @@ class Run {
           ? null
           : Game.fromJson(json['game'] as Map<String, dynamic>),
       category: Category.fromJson(json['category'] as Map<String, dynamic>),
-      //runners: json['runners'].map((runner) => Runner.fromJson(runner)), // TODO: Broken for some reason
-      //segments: json['segments'].map((segment) => Segment.fromJson(segment)), // TODO: Broken for some reason
+      runners: (json['runners'] as List<dynamic>).map<Runner>((dynamic runner) {
+        return Runner.fromJson(runner as Map<String, dynamic>);
+      }),
+      segments:
+          (json['segments'] as List<dynamic>).map<Segment>((dynamic segment) {
+        return Segment.fromJson(segment as Map<String, dynamic>);
+      }),
     );
   }
   static Map<Game, Iterable<Run>> byGame(Iterable<Run> runs) {
@@ -112,6 +117,10 @@ class Run {
     String twoDigitSeconds = twoDigits(d.inSeconds.remainder(60) as int);
 
     return "$twoDigitHours:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+  String uploadDate() {
+    return "${parsedAt.year}-${parsedAt.month.toString().padLeft(2, '0')}-${parsedAt.day.toString().padLeft(2, '0')}";
   }
 
   Uri uri() {

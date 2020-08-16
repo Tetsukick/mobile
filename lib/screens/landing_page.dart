@@ -4,8 +4,8 @@ import 'package:splitsio/models/auth.dart';
 import 'package:splitsio/models/runner.dart';
 import 'package:splitsio/screens/demo_sign_in.dart';
 import 'package:splitsio/screens/index.dart';
-import 'package:splitsio/widgets/logo.dart';
-import 'package:splitsio/widgets/twitch_button.dart';
+import 'package:splitsio/widgets/shared/logo.dart';
+import 'package:splitsio/widgets/shared/twitch_button.dart';
 
 class LandingPage extends StatelessWidget {
   final String message;

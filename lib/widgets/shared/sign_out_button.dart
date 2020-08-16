@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:splitsio/widgets/landing_page.dart';
+import 'package:splitsio/screens/landing_page.dart';
 
 class SignOutButton extends StatelessWidget {
   const SignOutButton() : super();

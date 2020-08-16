@@ -7,10 +7,9 @@ import 'package:splitsio/models/game.dart';
 class GameBoxArtBackground extends StatelessWidget {
   final Game game;
   final Widget child;
-  final Uri cover;
 
   const GameBoxArtBackground(
-      {@required this.child, @required this.game, @required this.cover});
+      {@required this.child, @required this.game});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,7 @@ class GameBoxArtBackground extends StatelessWidget {
                       Colors.black.withOpacity(0.1), BlendMode.dstATop),
                   fit: BoxFit.cover,
                   image: NetworkImage(
-                    cover.toString(),
+                    game.cover.toString(),
                   ),
                 ),
               ),

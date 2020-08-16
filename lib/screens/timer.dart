@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:splitsio/widgets/logo.dart';
+import 'package:splitsio/widgets/shared/logo.dart';
 
 class TimerScreen extends StatelessWidget {
   final String token;

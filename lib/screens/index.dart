@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:splitsio/models/runner.dart';
-import 'package:splitsio/widgets/game_list.dart';
-import 'package:splitsio/widgets/logo.dart';
-import 'package:splitsio/widgets/sign_out_button.dart';
+import 'package:splitsio/widgets/game/game_list.dart';
+import 'package:splitsio/widgets/shared/logo.dart';
+import 'package:splitsio/widgets/shared/sign_out_button.dart';
 
 class IndexScreen extends StatelessWidget {
   final Future<Runner> runner;

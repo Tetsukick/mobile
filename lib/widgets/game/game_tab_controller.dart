@@ -30,7 +30,7 @@ class GameTabController extends StatelessWidget {
                           .toList(),
                     ),
                     title: Text(game.name),
-                    floating: false,
+                    floating: true,
                     pinned: true),
               ];
             },

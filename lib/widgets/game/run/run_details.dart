@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:splitsio/models/run.dart';
@@ -19,11 +21,17 @@ class RunDetails extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           child: OutlineButton(
               child: ListTile(
-                title: Text(run.duration(),
-                    style: TextStyle(fontFamily: 'monospace', fontSize: 30)),
-                trailing: Icon(Icons.open_in_new),
+                title: Center(
+                  child: Text(run.duration(),
+                      style: TextStyle(fontFamily: 'monospace', fontSize: 30)),
+                ),
+                // iOS won't allow us to link to our website, since from there you can get to our payment page and they don't like that
+                trailing: Platform.isIOS ? null : Icon(Icons.open_in_new),
               ),
               onPressed: () async {
+                if (Platform.isIOS) {
+                  return;
+                }
                 if (await canLaunch(run.uri().toString())) {
                   await launch(run.uri().toString());
                 } else {

@@ -18,22 +18,16 @@ class GameList extends StatelessWidget {
       future: runner.then((runner) => runner.games(context)),
       builder: (BuildContext context, AsyncSnapshot<Iterable<Game>> snapshot) {
         if (snapshot.hasData) {
-          return GridView.count(
-            childAspectRatio: 0.71,
+          return GridView.extent(
+            childAspectRatio: .71,
             children: snapshot.data
                 .map((Game game) => GameBoxArt(game: game))
                 .toList(),
-            crossAxisCount: 2,
+            crossAxisSpacing: 0,
+            mainAxisSpacing: 0,
+            maxCrossAxisExtent: 300,
           );
         } else if (snapshot.hasError) {
-          // Without a forced delay, Flutter will hit an error due to Navigation
-          // hijinks. See
-          // https://github.com/flutter/flutter/issues/49779#issuecomment-630340754
-          /*
-          Future<void>.delayed(Duration(seconds: 1)).then((_) => Navigator.push(
-              context,
-              MaterialPageRoute<void>(builder: (context) => LandingPage())));
-              */
           throw snapshot.error;
         }
 

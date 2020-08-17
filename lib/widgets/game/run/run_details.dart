@@ -29,6 +29,7 @@ class RunDetails extends StatelessWidget {
                 trailing: Platform.isIOS ? null : Icon(Icons.open_in_new),
               ),
               onPressed: () async {
+                // iOS won't allow us to link to our website, since from there you can get to our payment page and they don't like that
                 if (Platform.isIOS) {
                   return;
                 }

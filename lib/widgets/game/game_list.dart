@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:splitsio/models/game.dart';
 import 'package:splitsio/models/runner.dart';
 import 'package:splitsio/widgets/game/game_box_art.dart';
+import 'package:splitsio/widgets/shared/loading_spinner.dart';
 
 class GameList extends StatelessWidget {
   final Future<Runner> runner;
@@ -31,15 +32,7 @@ class GameList extends StatelessWidget {
           throw snapshot.error;
         }
 
-        return Center(
-            child: Column(
-          children: [
-            Padding(padding: EdgeInsets.all(20)),
-            CircularProgressIndicator(),
-          ],
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-        ));
+        return LoadingSpinner();
       },
     );
   }

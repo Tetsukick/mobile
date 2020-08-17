@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:splitsio/models/auth.dart';
 import 'package:splitsio/models/runner.dart';
@@ -102,10 +105,13 @@ class SignInFormState extends State<SignInForm> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Center(
-              child: RaisedButton(
-                onPressed: _submit,
-                child: Text('Sign in', style: TextStyle(color: Colors.black)),
-              ),
+              child: Platform.isIOS
+                  ? CupertinoButton(child: Text('Sign in'), onPressed: _submit)
+                  : RaisedButton(
+                      onPressed: _submit,
+                      child: Text('Sign in',
+                          style: TextStyle(color: Colors.black)),
+                    ),
             ),
           ),
           Padding(

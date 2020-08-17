@@ -7,9 +7,14 @@ class LoadingSpinner extends StatelessWidget {
   LoadingSpinner();
 
   Widget build(BuildContext context) {
-    return Center(
-        child: Platform.isIOS
-            ? CupertinoActivityIndicator()
-            : CircularProgressIndicator());
+    return Column(
+      children: [
+        Padding(padding: EdgeInsets.all(20)),
+        Center(
+            child: Platform.isIOS
+                ? CupertinoActivityIndicator()
+                : CircularProgressIndicator()),
+      ],
+    );
   }
 }

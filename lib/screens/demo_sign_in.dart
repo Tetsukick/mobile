@@ -74,7 +74,7 @@ class SignInFormState extends State<SignInForm> {
                 if (value.isEmpty) {
                   return 'Please enter a username';
                 }
-                if (value != "demo") {
+                if (value != "demo" && value != "demopaid") {
                   return 'Incorrect username';
                 }
                 return null;
@@ -95,7 +95,7 @@ class SignInFormState extends State<SignInForm> {
                 if (value.isEmpty) {
                   return 'Please enter a password';
                 }
-                if (value != "demo") {
+                if (value != "demo" && value != "demopaid") {
                   return 'Incorrect password';
                 }
                 return null;

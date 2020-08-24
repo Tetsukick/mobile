@@ -52,6 +52,10 @@ class Runner {
       return Runner(id: '38310', name: 'splitsio_ios_review');
     }
 
+    if (Auth.demoPaid) {
+      return Runner(id: '38807', name: 'splitsio_ios_review_paid');
+    }
+
     if (_me != null) {
       return _me;
     }

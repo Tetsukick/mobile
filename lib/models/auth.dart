@@ -28,6 +28,7 @@ class Auth {
   static const customUriScheme =
       'splitsio'; // Must be kept in sync with AndroidManifest.xml & Info.plist
   static bool demo = false;
+  static bool demoPaid = false;
 
   static final OAuth2Helper http = OAuth2Helper(
       SplitsioOAuth2Client(
